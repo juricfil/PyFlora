@@ -1,4 +1,5 @@
 import sqlite3
+import base64
 
 def create_connection(db_file):
     """
@@ -44,6 +45,7 @@ def convertToBinaryData(filename):
     """
     with open(filename, 'rb') as file:
         blobData = file.read()
+    blobData = base64.b64encode(blobData)
     return blobData
 
 db_file = '/home/filip/PyFlora/instance/flaskr.sqlite'

@@ -12,7 +12,7 @@
     <label for="body">Plant</label>
       <SELECT name="plant_select" style="font-family:verdana">
         {% for plant in plants_list%}
-        <OPTION value={{ plant['name'] }}> {{ plant['name'] }} </OPTION>
+        <OPTION value="{{ plant['name'] }}"> {{ plant['name'] }} </OPTION>
         {% endfor %}
       </SELECT>
     <input type="submit" value="Save">

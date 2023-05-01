@@ -19,6 +19,11 @@
         {% endif %}
       </header>
       <p class="body">{{ pot['plant'] }}</p>
+      {% for plant in plants_list %}
+        {% if plant['name']==pot['plant'] %}
+          <img src="data:image/jpeg;base64,{{ plant['image'].decode('utf-8','ignore') | safe }}" alt="Plant Image">
+        {%  endif %}
+      {% endfor %}
     </article>
     {% if not loop.last %}
       <hr>

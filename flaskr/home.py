@@ -13,12 +13,13 @@ bp = Blueprint('home', __name__)
 def index():
     '''Fetching data stored for certain flower pot to be displayed'''
     db = get_db()
+    plants_list = db.execute('SELECT * FROM plants ORDER by id DESC').fetchall()
     flower_pots = db.execute(
         ' SELECT id, pot_name, plant'
         ' FROM flower_pot'
         ' ORDER BY id DESC'
     ).fetchall()
-    return render_template('home/index.html',flower_pots = flower_pots)
+    return render_template('home/index.html',flower_pots = flower_pots, plants_list = plants_list)
 
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required #login required to create
