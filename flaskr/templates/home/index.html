@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Flower pots{% endblock %}</h1>
+  {% if g.user %}
+    <button type="button" onclick="window.location.href='{{ url_for('home.create') }}'">Add New Pot</button>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  {% for pot in flower_pots %}
+    <article class="post">
+      <header>
+        <div>
+          <h1>{{ pot['pot_name'] }}</h1>
+        </div>
+        {% if g.user %}
+          <button type="button" onclick="window.location.href='{{ url_for('home.update', id=pot['id']) }}'">Edit</button>
+        {% endif %}
+      </header>
+      <p class="body">{{ pot['plant'] }}</p>
+    </article>
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
+  {% endfor %}
+{% endblock %}

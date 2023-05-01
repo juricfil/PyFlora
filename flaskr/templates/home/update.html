@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Edit "{{ pot['pot_name'] }}"{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="title">Pot name</label>
+    <input name="title" id="title"
+      value="{{ request.form['pot_name'] or pot['pot_name'] }}" required>
+    <label for="body">Plant</label>
+    <textarea name="body" id="body">{{ request.form['plant'] or pot['plant'] }}</textarea>
+    <input type="submit" value="Save">
+  </form>
+  <hr>
+  <form action="{{ url_for('home.delete', id=pot['id']) }}" method="post">
+    <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+  </form>
+{% endblock %}
