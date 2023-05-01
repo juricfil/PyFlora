@@ -24,9 +24,11 @@ def index():
 @login_required #login required to create
 def create():
     '''Creating a new flower pot'''
+    db = get_db()
+    plants_list = db.execute('SELECT * FROM plants ORDER by id DESC').fetchall()
     if request.method == 'POST':
         pot_name = request.form['title']
-        plant = request.form['body']
+        plant = request.form.get('plant_select')
         error = None
 
         if not pot_name:
@@ -37,7 +39,6 @@ def create():
         if error is not None:
             flash(error)
         else:
-            db = get_db()
             db.execute(
                 'INSERT INTO flower_pot (pot_name, plant)'
                 ' VALUES (?, ?)',
@@ -46,7 +47,7 @@ def create():
             db.commit()
             return redirect(url_for('home.index')) #redirecting back to home page after successful create
 
-    return render_template('home/create.html')
+    return render_template('home/create.html', plants_list=plants_list)
 
 def get_pot(id):
     '''Get pot id '''
@@ -65,9 +66,11 @@ def get_pot(id):
 def update(id):
     '''Update already created flower pot'''
     pot = get_pot(id)
+    db = get_db()
+    plants_list = db.execute('SELECT * FROM plants ORDER by id DESC').fetchall()
     if request.method == 'POST':
         pot_name = request.form['title']
-        plant = request.form['body']
+        plant = request.form.get('plant_select')
         error = None
 
         if not pot_name:
@@ -78,16 +81,15 @@ def update(id):
         if error is not None:
             flash(error)
         else:
-            db = get_db()
             db.execute(
-                'UPDATE flower_pot SET pot_name = ?, plant = ?'
+                ' UPDATE flower_pot SET pot_name = ?, plant = ?'
                 ' WHERE id = ?',
                 (pot_name, plant, id)
             )
             db.commit()
             return redirect(url_for('home.index'))
 
-    return render_template('home/update.html', pot=pot)
+    return render_template('home/update.html', pot=pot, plants_list=plants_list)
 
 @bp.route('/<int:id>/delete', methods=('POST',))
 @login_required

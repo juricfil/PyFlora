@@ -12,7 +12,7 @@ CREATE TABLE plants (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT UNIQUE NOT NULL,
     image VARBINARY NOT NULL,
-    humiditiy INT NOT NULL,
+    humidity INT NOT NULL,
     light FLOAT NOT NULL,
     substrate TEXT
 );
