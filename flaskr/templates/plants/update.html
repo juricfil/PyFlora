@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Edit "{{ plant['name'] }}"{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post" enctype="multipart/form-data">
+    <label for="name">Plant name</label>
+    <input name="name" id="name"
+      value="{{ request.form['name'] or plant['name'] }}" required>
+
+    <label for="image">Image:</label>
+    <input type="file" id="image" name="image" accept="image/*" required>
+
+    <label for="name">Humidity</label>
+    <input name="humidity" id="humidity"
+        value="{{ request.form['humidity'] or plant['humidity'] }}" required>
+
+    <label for="name">Light</label>
+    <input name="light" id="light"
+        value="{{ request.form['light'] or plant['light'] }}" required>
+    
+    <label for="name">Light</label>
+    <input name="substrate" id="substrate"
+        value="{{ request.form['substrate'] or plant['substrate'] }}" required>
+
+    <input type="submit" value="Save">
+  </form>
+  <hr>
+  <form action="{{ url_for('plants.delete', id=plant['id']) }}" method="post">
+    <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+  </form>
+{% endblock %}

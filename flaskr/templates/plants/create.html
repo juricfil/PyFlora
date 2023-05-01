@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}New Flower{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<form action="{{ url_for('plants.create') }}" method="post" enctype="multipart/form-data">
+    <label for="name">Name:</label>
+    <input type="text" name="name" id="name" required>
+  
+    <label for="image">Image:</label>
+    <input type="file" id="image" name="image" accept="image/*" required>
+  
+    <label for="humidity">Humidity:</label>
+    <input type="number" name="humidity" id="humidity" required>
+  
+    <label for="light">Light:</label>
+    <input type="number" name="light" id="light" required>
+  
+    <label for="substrate">Substrate:</label>
+    <input type="text" name="substrate" id="substrate" required>
+  
+    <button type="submit">Create</button>
+  </form>
+{% endblock %}

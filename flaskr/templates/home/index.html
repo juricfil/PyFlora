@@ -4,6 +4,7 @@
   <h1>{% block title %}Flower pots{% endblock %}</h1>
   {% if g.user %}
     <button type="button" onclick="window.location.href='{{ url_for('home.create') }}'">Add New Pot</button>
+    <button type="button" onclick="window.location.href='{{ url_for('plants.index') }}'">View Plants</button>
   {% endif %}
 {% endblock %}
 

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Plants{% endblock %}</h1>
+  {% if g.user %}
+    <button type="button" onclick="window.location.href='{{ url_for('home.index') }}'">Back to Flower Pots</button>
+    <button type="button" onclick="window.location.href='{{ url_for('plants.create') }}'">Add new Plant</button>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  {% for plant in plants %}
+    <article class="post">
+      <header>
+        <div>
+          <h1>{{ plant['name'] }}</h1>
+          <ul>
+            <li> Humidity needed: {{ plant['humidity'] }}</li>
+            <li> Light needed: {{ plant['light'] }}</li>
+            <li> Substrate needed: 
+                {% if plant['substrate'] %}
+                    {{ plant['substrate'] }}
+                {% else %}
+                    Not needed
+                {% endif %}
+            </li>
+          </ul>
+          <img src="data:image/jpeg;base64,{{ plant['image'].decode('utf-8','ignore') | safe }}" alt="Plant Image">
+        </div>
+        {% if g.user %}
+          <button type="button" onclick="window.location.href='{{ url_for('plants.update', id=plant['id']) }}'">Edit</button>
+        {% endif %}
+      </header>
+    </article>
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
+  {% endfor %}
+{% endblock %}
