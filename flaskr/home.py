@@ -1,11 +1,14 @@
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for,jsonify
+    Blueprint, flash, g, redirect, render_template, request, url_for
 )
 from werkzeug.exceptions import abort
 
 from flaskr.auth import login_required
 from flaskr.db import get_db
 import random # to be removed after measurements from the sensors are implemented
+import base64
+from matplotlib.figure import Figure
+from io import BytesIO
 
 bp = Blueprint('home', __name__)
 
@@ -114,4 +117,17 @@ def details(id):
     db = get_db()
     plants_list = db.execute('SELECT * FROM plants ORDER by id DESC').fetchall()
 
-    return render_template('home/details.html',sensor_measurement = sensor_measurement, pot = pot, plants_list=plants_list)
+    # Generate the figure **without using pyplot**.
+    fig = Figure()
+    ax = fig.subplots()
+    ax.plot([sensor_measurement[0], sensor_measurement[1]])
+    # Save it to a temporary buffer.
+    buf = BytesIO()
+    fig.savefig(buf, format="png")
+    # Embed the result in the html output.
+    data = base64.b64encode(buf.getbuffer()).decode("ascii")
+
+    return render_template('home/details.html',
+                           sensor_measurement = sensor_measurement, pot = pot,
+                             plants_list=plants_list, data=data)
+

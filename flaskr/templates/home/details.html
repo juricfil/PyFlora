@@ -4,7 +4,6 @@
   <h1>{% block title %}Details of "{{ pot['pot_name'] }}" Pot {% endblock %}</h1>
   {% if g.user %}
     <button type="button" onclick="window.location.href='{{ url_for('home.index') }}'">Back to Pots</button>
-    <input type="reset" value="REFRESH">
   {% endif %}
 {% endblock %}
 
@@ -26,5 +25,8 @@
           <img src="data:image/jpeg;base64,{{ plant['image'].decode('utf-8','ignore') | safe }}" alt="Plant Image">
         {%  endif %}
       {% endfor %}
+      <div>
+        <img src='data:image/png;base64,{{ data }}' alt="graph">
+      </div>
     </article>
 {% endblock %}
