@@ -17,6 +17,7 @@
         </div>
         {% if g.user %}
           <button type="button" onclick="window.location.href='{{ url_for('home.update', id=pot['id']) }}'">Edit</button>
+          <button type="button" onclick="window.location.href='{{ url_for('home.details', id=pot['id']) }}'">Details</button>
         {% endif %}
       </header>
       <p class="body">{{ pot['plant'] }}</p>

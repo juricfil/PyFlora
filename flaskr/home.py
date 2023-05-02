@@ -1,10 +1,11 @@
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for
+    Blueprint, flash, g, redirect, render_template, request, url_for,jsonify
 )
 from werkzeug.exceptions import abort
 
 from flaskr.auth import login_required
 from flaskr.db import get_db
+import random # to be removed after measurements from the sensors are implemented
 
 bp = Blueprint('home', __name__)
 
@@ -101,3 +102,16 @@ def delete(id):
     db.execute('DELETE FROM flower_pot WHERE id = ?', (id,))
     db.commit()
     return redirect(url_for('home.index'))
+
+@bp.route('/<int:id>/details',methods=('GET',))
+@login_required
+def details(id):
+    '''
+    Details of a flower pot
+    '''
+    pot = get_pot(id)
+    sensor_measurement = [random.randrange(20),random.randrange(50),random.randrange(40)]# to be removed after measurements from the sensors are implemented
+    db = get_db()
+    plants_list = db.execute('SELECT * FROM plants ORDER by id DESC').fetchall()
+
+    return render_template('home/details.html',sensor_measurement = sensor_measurement, pot = pot, plants_list=plants_list)

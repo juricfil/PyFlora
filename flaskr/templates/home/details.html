@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Details of "{{ pot['pot_name'] }}" Pot {% endblock %}</h1>
+  {% if g.user %}
+    <button type="button" onclick="window.location.href='{{ url_for('home.index') }}'">Back to Pots</button>
+    <input type="reset" value="REFRESH">
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+    <article class="post">
+      <header>
+        <div>
+          <h1>{{ pot['plant'] }}</h1>
+        </div>
+      </header>
+      <h1> Sensor Measurements</h1>
+          <ul>
+            <li> Sensor 1: {{ sensor_measurement[0] }}</li>
+            <li> Sensor 2: {{ sensor_measurement[1]  }}</li>
+            <li> Sensor 3: {{ sensor_measurement[2] }}</li>
+          </ul>
+      {% for plant in plants_list %}
+        {% if plant['name']==pot['plant'] %}
+          <img src="data:image/jpeg;base64,{{ plant['image'].decode('utf-8','ignore') | safe }}" alt="Plant Image">
+        {%  endif %}
+      {% endfor %}
+    </article>
+{% endblock %}
