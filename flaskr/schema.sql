@@ -22,3 +22,10 @@ CREATE TABLE flower_pot (
     pot_name TEXT UNIQUE NOT NULL,
     plant TEXT
 );
+
+CREATE TABlE measurements (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    humidity INT NOT NULL,
+    acidity FLOAT NOT NULL,
+    lux INT NOT NULL
+);

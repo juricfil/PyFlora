@@ -113,14 +113,22 @@ def details(id):
     Details of a flower pot
     '''
     pot = get_pot(id)
-    sensor_measurement = [random.randrange(20),random.randrange(50),random.randrange(40)]# to be removed after measurements from the sensors are implemented
     db = get_db()
+    
     plants_list = db.execute('SELECT * FROM plants ORDER by id DESC').fetchall()
-
+    measurements = db.execute('SELECT * FROM measurements ORDER by id').fetchall()
+    humidity = []
+    acidity = []
+    lux = []
+    for row in measurements:
+        humidity.append(row[1])
+        acidity.append(row[2])
+        lux.append(row[3])
+    last_sensor_measurements = db.execute('SELECT * FROM measurements ORDER by id DESC').fetchone()
     # Generate the figure **without using pyplot**.
     fig = Figure()
     ax = fig.subplots()
-    ax.plot([sensor_measurement[0], sensor_measurement[1]])
+    ax.plot(humidity)
     # Save it to a temporary buffer.
     buf = BytesIO()
     fig.savefig(buf, format="png")
@@ -128,6 +136,8 @@ def details(id):
     data = base64.b64encode(buf.getbuffer()).decode("ascii")
 
     return render_template('home/details.html',
-                           sensor_measurement = sensor_measurement, pot = pot,
+                           sensor_measurement = last_sensor_measurements, pot = pot,
                              plants_list=plants_list, data=data)
+
+
 

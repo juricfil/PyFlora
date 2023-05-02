@@ -16,9 +16,9 @@
       </header>
       <h1> Sensor Measurements</h1>
           <ul>
-            <li> Sensor 1: {{ sensor_measurement[0] }}</li>
-            <li> Sensor 2: {{ sensor_measurement[1]  }}</li>
-            <li> Sensor 3: {{ sensor_measurement[2] }}</li>
+            <li> Humidity measurement: {{sensor_measurement['humidity'] }} %</li>
+            <li> Acidity measurement: {{ sensor_measurement['acidity']  }} pH</li>
+            <li> Light measurement: {{ sensor_measurement['lux'] }} Lux</li>
           </ul>
       {% for plant in plants_list %}
         {% if plant['name']==pot['plant'] %}
