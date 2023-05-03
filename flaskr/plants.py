@@ -1,13 +1,11 @@
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for
+    Blueprint, flash, redirect, render_template, request, url_for
 )
 from werkzeug.exceptions import abort
-from werkzeug.utils import secure_filename
 
 from flaskr.auth import login_required
 from flaskr.db import get_db
 import base64
-
 
 bp = Blueprint('plants', __name__)
 

@@ -129,6 +129,8 @@ def details(id):
     fig = Figure()
     ax = fig.subplots()
     ax.plot(humidity)
+    ax.plot(acidity)
+    ax.plot(list(map(lambda x: x//10, lux))) # scaling lux by 10 
     # Save it to a temporary buffer.
     buf = BytesIO()
     fig.savefig(buf, format="png")

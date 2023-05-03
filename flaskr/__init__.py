@@ -6,7 +6,8 @@ def create_app(test_config = None):
     Creates webapp from blueprints, tako test_config if running test on the app.
     '''
     app = Flask(__name__, instance_relative_config=True) #creates app. python module name set and location of config files
-    app.config.from_mapping(SECRET_KEY='dev', DATABASE=os.path.join(app.instance_path,'flaskr.sqlite')) # sets default configuration for app to use, SECRET_KEY to be removed
+    app.config.from_mapping(SECRET_KEY='dev', 
+                            DATABASE=os.path.join(app.instance_path,'flaskr.sqlite')) # sets default configuration for app to use, SECRET_KEY to be removed
 
     #To be removed if NO test are written, test_config input also
     if test_config is None:
