@@ -20,7 +20,8 @@ CREATE TABLE plants (
 CREATE TABLE flower_pot (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     pot_name TEXT UNIQUE NOT NULL,
-    plant TEXT
+    plant TEXT,
+    status TEXT
 );
 
 CREATE TABlE measurements (

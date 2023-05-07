@@ -24,6 +24,9 @@
       {% for plant in plants_list %}
         {% if plant['name']==pot['plant'] %}
           <img src="data:image/jpeg;base64,{{ plant['image'].decode('utf-8','ignore') | safe }}" alt="Plant Image">
+          <div>
+            <h3> Status: {{ pot['status'] }}</h3>
+          </div>
         {%  endif %}
       {% endfor %}
     </article>

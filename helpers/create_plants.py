@@ -54,6 +54,20 @@ def column_name(db_connection):
 
     return None
 
+def add_column(db_connection):
+    """
+    Add column
+    """
+    query = """ALTER TABLE flower_pot ADD status TEXT default "All Good";"""
+    try:
+        cursor = db_connection.cursor()
+        cursor.execute(query)
+        db_connection.commit()
+        print("Column added")
+        return cursor.lastrowid
+    except sqlite3.Error as error:
+        print(error)
+
 # Function for Convert Binary Data 
 # to Human Readable Format
 def convertToBinaryData(filename):
@@ -73,5 +87,5 @@ plant2 = ('African Violet',pic2,80,10,'fertilizer')'''
 
 db_file = '/home/filip/PyFlora/instance/flaskr.sqlite'
 connection = create_connection(db_file=db_file)
-column_name(connection)
+add_column(connection)
 close_connection(connection)

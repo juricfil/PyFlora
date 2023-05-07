@@ -13,7 +13,7 @@
     <label for="image">Image:</label>
     <input type="file" id="image" name="image" accept="image/*" required>
 
-    <label for="name">soil_moisture</label>
+    <label for="name">Soil_moisture</label>
     <input name="soil_moisture" id="soil_moisture"
         value="{{ request.form['soil_moisture'] or plant['soil_moisture'] }}" required>
 
@@ -21,7 +21,7 @@
     <input name="light" id="light"
         value="{{ request.form['light'] or plant['light'] }}" required>
     
-    <label for="name">Light</label>
+    <label for="name">Substrate</label>
     <input name="substrate" id="substrate"
         value="{{ request.form['substrate'] or plant['substrate'] }}" required>
 

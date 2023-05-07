@@ -17,13 +17,23 @@ bp = Blueprint('home', __name__)
 def index():
     '''Fetching data stored for certain flower pot to be displayed'''
     db = get_db()
+    status = 'All Good'
     plants_list = db.execute('SELECT * FROM plants ORDER by id DESC').fetchall()
     flower_pots = db.execute(
-        ' SELECT id, pot_name, plant'
+        ' SELECT id, pot_name, plant, status'
         ' FROM flower_pot'
         ' ORDER BY id DESC'
     ).fetchall()
-    soil_moisture = db.execute('SELECT soil_moisture FROM measurements ORDER by id DESC').fetchone() #fetch latest soil moisture
+    soil_moisture = db.execute('SELECT soil_moisture FROM measurements ORDER by id DESC;').fetchone()[0] #fetch latest soil moisture
+    for pot in flower_pots:
+        flower_moist_needed = db.execute('SELECT soil_moisture FROM plants WHERE name = ? ;', (pot['plant'],)).fetchone()[0]
+        if soil_moisture < flower_moist_needed:
+            status = 'Water the Plants'
+        else:
+            status = 'All Good'
+        db.execute("UPDATE flower_pot SET status = ?;", (status,))
+        db.commit()
+
     return render_template('home/index.html',flower_pots = flower_pots, plants_list = plants_list, soil_moisture = soil_moisture)
 
 @bp.route('/create', methods=('GET', 'POST'))
