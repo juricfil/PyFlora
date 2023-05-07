@@ -106,7 +106,7 @@ def delete(id):
     db.commit()
     return redirect(url_for('home.index'))
 
-@bp.route('/<int:id>/details',methods=('GET',))
+@bp.route('/<int:id>/details',methods=('GET','POST'))
 @login_required
 def details(id):
     '''
@@ -125,13 +125,38 @@ def details(id):
         acidity.append(row[2])
         lux.append(row[3])
     last_sensor_measurements = db.execute('SELECT * FROM measurements ORDER by id DESC').fetchone()
-    # Generate the figure **without using pyplot**.
-    fig = Figure()
-    ax = fig.subplots()
-    ax.plot(humidity)
-    ax.plot(acidity)
-    ax.plot(list(map(lambda x: x//10, lux))) # scaling lux by 10 
-    # Save it to a temporary buffer.
+    lux = list(map(lambda x: x//10, lux)) # scal lux by 10
+    # Generate the figure **without using pyplot**.Based on the post button
+    if request.method == 'POST':
+        # generate plot based on button click
+        if request.form.get('pie'):
+            # pie chart
+            fig = Figure()
+            ax = fig.subplots()
+            ax.pie([sum(humidity), sum(acidity), sum(lux)], labels=['humidity', 'acidity', 'lux'])
+        elif request.form.get('histo'):
+            # histogram
+            fig = Figure()
+            ax = fig.subplots()
+            ax.hist(humidity, alpha=0.5, label='humidity')
+            ax.hist(acidity, alpha=0.5, label='acidity')
+            ax.hist(lux, alpha=0.5, label='lux')
+            ax.legend(loc='upper right')
+        else:
+            # line plot (default)
+            fig = Figure()
+            ax = fig.subplots()
+            ax.plot(humidity)
+            ax.plot(acidity)
+            ax.plot(lux)
+    else:
+        # default line plot
+        fig = Figure()
+        ax = fig.subplots()
+        ax.plot(humidity)
+        ax.plot(acidity)
+        ax.plot(lux)
+    # Save it to a temporary buffer.)
     buf = BytesIO()
     fig.savefig(buf, format="png")
     # Embed the result in the html output.
