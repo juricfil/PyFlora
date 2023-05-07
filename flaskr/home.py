@@ -1,3 +1,6 @@
+import base64
+from io import BytesIO
+from matplotlib.figure import Figure
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, url_for
 )
@@ -5,10 +8,7 @@ from werkzeug.exceptions import abort
 
 from flaskr.auth import login_required
 from flaskr.db import get_db
-import random # to be removed after measurements from the sensors are implemented
-import base64
-from matplotlib.figure import Figure
-from io import BytesIO
+from flaskr.weather_api import current_temp
 
 bp = Blueprint('home', __name__)
 
@@ -23,7 +23,8 @@ def index():
         ' FROM flower_pot'
         ' ORDER BY id DESC'
     ).fetchall()
-    return render_template('home/index.html',flower_pots = flower_pots, plants_list = plants_list)
+    soil_moisture = db.execute('SELECT soil_moisture FROM measurements ORDER by id DESC').fetchone() #fetch latest soil moisture
+    return render_template('home/index.html',flower_pots = flower_pots, plants_list = plants_list, soil_moisture = soil_moisture)
 
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required #login required to create
@@ -117,15 +118,15 @@ def details(id):
     
     plants_list = db.execute('SELECT * FROM plants ORDER by id DESC').fetchall()
     measurements = db.execute('SELECT * FROM measurements ORDER by id').fetchall()
-    humidity = []
+    soil_moisture = []
     acidity = []
     lux = []
     for row in measurements:
-        humidity.append(row[1])
+        soil_moisture.append(row[1])
         acidity.append(row[2])
         lux.append(row[3])
     last_sensor_measurements = db.execute('SELECT * FROM measurements ORDER by id DESC').fetchone()
-    lux = list(map(lambda x: x//10, lux)) # scal lux by 10
+    lux = list(map(lambda x: x//10, lux)) # scale lux by 10
     # Generate the figure **without using pyplot**.Based on the post button
     if request.method == 'POST':
         # generate plot based on button click
@@ -133,12 +134,12 @@ def details(id):
             # pie chart
             fig = Figure()
             ax = fig.subplots()
-            ax.pie([sum(humidity), sum(acidity), sum(lux)], labels=['humidity', 'acidity', 'lux'])
+            ax.pie([sum(soil_moisture), sum(acidity), sum(lux)], labels=['soil_moisture', 'acidity', 'lux'])
         elif request.form.get('histo'):
             # histogram
             fig = Figure()
             ax = fig.subplots()
-            ax.hist(humidity, alpha=0.5, label='humidity')
+            ax.hist(soil_moisture, alpha=0.5, label='soil_moisture')
             ax.hist(acidity, alpha=0.5, label='acidity')
             ax.hist(lux, alpha=0.5, label='lux')
             ax.legend(loc='upper right')
@@ -146,14 +147,14 @@ def details(id):
             # line plot (default)
             fig = Figure()
             ax = fig.subplots()
-            ax.plot(humidity)
+            ax.plot(soil_moisture)
             ax.plot(acidity)
             ax.plot(lux)
     else:
         # default line plot
         fig = Figure()
         ax = fig.subplots()
-        ax.plot(humidity)
+        ax.plot(soil_moisture)
         ax.plot(acidity)
         ax.plot(lux)
     # Save it to a temporary buffer.)
@@ -164,7 +165,7 @@ def details(id):
 
     return render_template('home/details.html',
                            sensor_measurement = last_sensor_measurements, pot = pot,
-                             plants_list=plants_list, data=data)
+                             plants_list=plants_list, data=data, current_temp= current_temp)
 
 
 

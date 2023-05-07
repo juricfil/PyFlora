@@ -26,7 +26,7 @@ def create_plant(db_connection, plant):
     """
     Create new plant
     """
-    query = """INSERT INTO plants (name, image, humidity, light, substrate) VALUES (?, ?, ?, ?, ?)"""
+    query = """INSERT INTO plants (name, image, soil_moisture, light, substrate) VALUES (?, ?, ?, ?, ?)"""
     try:
         cursor = db_connection.cursor()
         cursor.execute(query, plant)
@@ -35,6 +35,23 @@ def create_plant(db_connection, plant):
     except sqlite3.Error as error:
         print(error)
  
+    return None
+
+
+def column_name(db_connection):
+    """
+    Alter Column name
+    """
+    query = """ALTER TABLE measurements RENAME COLUMN humidity TO soil_moisture;"""
+    try:
+        cursor = db_connection.cursor()
+        cursor.execute(query)
+        db_connection.commit()
+        print("Column name changed")
+        return cursor.lastrowid
+    except sqlite3.Error as error:
+        print(error)
+
     return None
 
 # Function for Convert Binary Data 
@@ -48,13 +65,13 @@ def convertToBinaryData(filename):
     blobData = base64.b64encode(blobData)
     return blobData
 
-db_file = '/home/filip/PyFlora/instance/flaskr.sqlite'
+'''db_file = '/home/filip/PyFlora/instance/flaskr.sqlite'
 pic1 = convertToBinaryData('/home/filip/PyFlora/helpers/Alocasia-1.jpg')
 pic2 = convertToBinaryData('/home/filip/PyFlora/helpers/Saintpaulia-Ionantha.jpg')
 plant1 = ('African Mask',pic1,60,10,None)
-plant2 = ('African Violet',pic2,80,10,'fertilizer')
+plant2 = ('African Violet',pic2,80,10,'fertilizer')'''
 
+db_file = '/home/filip/PyFlora/instance/flaskr.sqlite'
 connection = create_connection(db_file=db_file)
-create_plant(connection, plant1)
-create_plant(connection, plant2)
+column_name(connection)
 close_connection(connection)

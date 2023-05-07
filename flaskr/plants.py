@@ -32,7 +32,7 @@ def create():
         image = request.files['image'].read()
         image_blob = base64.b64encode(image)
 
-        humidity = request.form['humidity']
+        soil_moisture = request.form['soil_moisture']
         light = request.form['light']
         substrate = request.form['substrate']
         error = None
@@ -41,7 +41,7 @@ def create():
             error = 'Pot name is required'
         elif not image_blob:
             error = 'Image is required'
-        elif not humidity:
+        elif not soil_moisture:
             error = 'Humiditiy is required'
         elif not light:
             error = 'Light is required'
@@ -49,9 +49,9 @@ def create():
         if error is not None:
             flash(error)
         else:
-            db.execute('INSERT INTO plants (name, image, humidity, light, substrate)'
+            db.execute('INSERT INTO plants (name, image, soil_moisture, light, substrate)'
                        'VALUES (?,?,?,?,?)',
-                       (name,image_blob,humidity,light,substrate)
+                       (name,image_blob,soil_moisture,light,substrate)
                        )
             db.commit()
             return redirect(url_for('plants.index'))
@@ -82,7 +82,7 @@ def update(id):
         image = request.files['image'].read()
         image_blob = base64.b64encode(image)
 
-        humidity = request.form['humidity']
+        soil_moisture = request.form['soil_moisture']
         light = request.form['light']
         substrate = request.form['substrate']
         error = None
@@ -91,7 +91,7 @@ def update(id):
             error = 'Pot name is required'
         #elif not image_blob:
         #    error = 'Image is required'
-        elif not humidity:
+        elif not soil_moisture:
             error = 'Humiditiy is required'
         elif not light:
             error = 'Light is required'
@@ -100,9 +100,9 @@ def update(id):
             flash(error)
         else:
             db.execute(
-                ' UPDATE plants SET name = ?, image = ?, humidity = ?, light = ?, substrate = ?'
+                ' UPDATE plants SET name = ?, image = ?, soil_moisture = ?, light = ?, substrate = ?'
                 ' WHERE id = ?',
-                (name, image_blob, humidity, light, substrate, id)
+                (name, image_blob, soil_moisture, light, substrate, id)
             )
             db.commit()
             return redirect(url_for('plants.index'))

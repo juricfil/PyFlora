@@ -11,13 +11,13 @@ def random_measurements(db):
     '''
 
     while True:
-        humidity = random.randrange(0,100)
+        soil_moisture = random.randrange(0,100)
         aciditiy = round(random.uniform(4,7),2)
         lux = random.randrange(1000,3000)
-        print(humidity,aciditiy,lux)
+        print(soil_moisture,aciditiy,lux)
         db.execute(
-                'INSERT INTO  measurements (humidity, acidity, lux) VALUES (?,?,?) ',
-                (humidity, aciditiy, lux))
+                'INSERT INTO  measurements (soil_moisture, acidity, lux) VALUES (?,?,?) ',
+                (soil_moisture, aciditiy, lux))
         db.commit()
         time.sleep(10.0)
 

@@ -13,9 +13,9 @@
     <label for="image">Image:</label>
     <input type="file" id="image" name="image" accept="image/*" required>
 
-    <label for="name">Humidity</label>
-    <input name="humidity" id="humidity"
-        value="{{ request.form['humidity'] or plant['humidity'] }}" required>
+    <label for="name">soil_moisture</label>
+    <input name="soil_moisture" id="soil_moisture"
+        value="{{ request.form['soil_moisture'] or plant['soil_moisture'] }}" required>
 
     <label for="name">Light</label>
     <input name="light" id="light"

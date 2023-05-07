@@ -12,7 +12,7 @@ CREATE TABLE plants (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT UNIQUE NOT NULL,
     image VARBINARY NOT NULL,
-    humidity INT NOT NULL,
+    soil_moisture INT NOT NULL,
     light FLOAT NOT NULL,
     substrate TEXT
 );
@@ -25,7 +25,7 @@ CREATE TABLE flower_pot (
 
 CREATE TABlE measurements (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    humidity INT NOT NULL,
+    soil_moisture INT NOT NULL,
     acidity FLOAT NOT NULL,
     lux INT NOT NULL
 );
