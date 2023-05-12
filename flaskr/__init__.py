@@ -1,5 +1,6 @@
 import os 
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
 
 def create_app(test_config = None):
     '''
@@ -7,7 +8,8 @@ def create_app(test_config = None):
     '''
     app = Flask(__name__, instance_relative_config=True) #creates app. python module name set and location of config files
     app.config.from_mapping(SECRET_KEY='dev', 
-                            DATABASE=os.path.join(app.instance_path,'flaskr.sqlite')) # sets default configuration for app to use, SECRET_KEY to be removed
+                            SQLALCHEMY_DATABASE_URI='sqlite:///' + os.path.join(app.instance_path, 'flaskr.sqlite'),
+                            SQLALCHEMY_TRACK_MODIFICATIONS=False) # sets default configuration for app to use, SECRET_KEY to be removed
 
     #To be removed if NO test are written, test_config input also
     if test_config is None:
@@ -24,7 +26,7 @@ def create_app(test_config = None):
         pass
 
     from . import db
-    db.init_app(app)
+    db.init_app(app) # initialize the app with the extension
 
     from . import auth
     app.register_blueprint(auth.bp)

@@ -2,15 +2,24 @@ from sqlalchemy import create_engine, Column, Integer, String, LargeBinary, Floa
 from sqlalchemy.ext.declarative import declarative_base
 import click
 from flask import current_app, g 
+from werkzeug.security import generate_password_hash, check_password_hash
 
 engine = create_engine('sqlite:////home/filip/PyFlora/instance/database.db', echo=True)
 Base = declarative_base()
 
 class User(Base):
-    __tablename__ = 'user'
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    username = Column(String(50), nullable=False, unique=True)
-    password = Column(String(255), nullable=False)
+    id = Column(Integer, primary_key=True)
+    username = Column(String(20), unique=True, nullable=False)
+    password = Column(String(128), nullable=False)
+
+    def __repr__(self):
+        return f"<User {self.username}>"
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
 class Plants(Base):
     __tablename__ = 'plants'
