@@ -24,7 +24,7 @@ CREATE TABLE flower_pot (
     status TEXT
 );
 
-CREATE TABlE measurements (
+CREATE TABLE measurements (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     soil_moisture INT NOT NULL,
     acidity FLOAT NOT NULL,
