@@ -5,6 +5,7 @@ from werkzeug.exceptions import abort
 
 from flaskr.auth import login_required
 from flaskr.db import get_db
+from flaskr.db import User, Plants, FlowerPot
 import base64
 
 bp = Blueprint('plants', __name__)
@@ -16,7 +17,7 @@ def index():
     Fetching flowers data to be displayed
     '''
     db = get_db()
-    plants = db.execute('SELECT * FROM plants ORDER by id DESC').fetchall()
+    plants = Plants.query.order_by(Plants.id.desc()).all()
     return render_template('plants/index.html', plants = plants)
 
 @bp.route('/plants/create',methods=('GET', 'POST'))
@@ -49,10 +50,8 @@ def create():
         if error is not None:
             flash(error)
         else:
-            db.execute('INSERT INTO plants (name, image, soil_moisture, light, substrate)'
-                       'VALUES (?,?,?,?,?)',
-                       (name,image_blob,soil_moisture,light,substrate)
-                       )
+            new_plant = Plants(name = name,image=image_blob,soil_moisture=soil_moisture,light=light,substrate=substrate)
+            db.add(new_plant)
             db.commit()
             return redirect(url_for('plants.index'))
     return render_template('plants/create.html')
@@ -60,10 +59,7 @@ def create():
 def get_plant(id):
     '''Get pot id '''
     db = get_db()
-    plant = db.execute(
-        'SELECT *FROM plants WHERE id = ?',
-        (id,)
-    ).fetchone()
+    plant = db.query(Plants).filter_by(id=id).first()
 
     if plant is None:
         abort(404, f"Plant id {id} doesn't exist.")
@@ -75,7 +71,7 @@ def update(id):
     '''Update already created flower pot'''
     plant = get_plant(id)
     db = get_db()
-    plants_list = db.execute('SELECT * FROM plants ORDER by id DESC').fetchall()
+    plants_list = Plants.query.order_by(Plants.id.desc()).all()
     if request.method == 'POST':
         name = request.form['name']
         #converting uploaded image to blob, and encode
@@ -99,11 +95,11 @@ def update(id):
         if error is not None:
             flash(error)
         else:
-            db.execute(
-                ' UPDATE plants SET name = ?, image = ?, soil_moisture = ?, light = ?, substrate = ?'
-                ' WHERE id = ?',
-                (name, image_blob, soil_moisture, light, substrate, id)
-            )
+            plant.name = name
+            plant.image = image_blob
+            plant.soil_moisture = soil_moisture
+            plant.light = light
+            plant.substrate = substrate
             db.commit()
             return redirect(url_for('plants.index'))
 
@@ -113,8 +109,8 @@ def update(id):
 @login_required
 def delete(id):
     '''Delet a plants'''
-    get_plant(id)
+    plant = get_plant(id)
     db = get_db()
-    db.execute('DELETE FROM plants WHERE id = ?', (id,))
+    db.delete(plant)
     db.commit()
     return redirect(url_for('plants.index'))

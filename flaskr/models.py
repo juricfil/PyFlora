@@ -1,11 +1,9 @@
-from flask import current_app, g
-from flask_sqlalchemy import SQLAlchemy
 import sqlalchemy as sa
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_sqlalchemy import SQLAlchemy
 
-db = SQLAlchemy()
+#db = SQLAlchemy()
 
-#Defining classes to be used for database
 class User(db.Model):
     __tablename__ = 'user'
     id = sa.Column(sa.Integer, primary_key=True)
@@ -44,21 +42,6 @@ class Measurements(db.Model):
     acidity =sa.Column(sa.Float, nullable=False)
     lux =sa.Column(sa.Integer, nullable=False)
 
-#Defining functions to be used for database    
-def init_app(app):
-    '''Registering functions with the application.'''
-    db.init_app(app)
-
-def get_db():
-    '''Returns a SQLAlchemy database session.'''
-    return db.session
-
-def close_db(e=None):
-    '''Closes the database connection.'''
-    db.session.close()
-
-def init_db():
-    '''Initializes the database based on schema.'''
-    db.create_all()
-
-
+'''#Base.metadata.create_all(engine)
+with app.app_context():
+    db.create_all()'''
