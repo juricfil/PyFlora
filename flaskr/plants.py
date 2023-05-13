@@ -1,12 +1,11 @@
+import base64
 from flask import (
     Blueprint, flash, redirect, render_template, request, url_for
 )
 from werkzeug.exceptions import abort
-
 from flaskr.auth import login_required
 from flaskr.db import get_db
-from flaskr.db import User, Plants, FlowerPot
-import base64
+from flaskr.db import Plants
 
 bp = Blueprint('plants', __name__)
 
@@ -16,7 +15,6 @@ def index():
     '''
     Fetching flowers data to be displayed
     '''
-    db = get_db()
     plants = Plants.query.order_by(Plants.id.desc()).all()
     return render_template('plants/index.html', plants = plants)
 
@@ -50,7 +48,8 @@ def create():
         if error is not None:
             flash(error)
         else:
-            new_plant = Plants(name = name,image=image_blob,soil_moisture=soil_moisture,light=light,substrate=substrate)
+            new_plant = Plants(name = name,image=image_blob,
+                               soil_moisture=soil_moisture,light=light,substrate=substrate)
             db.add(new_plant)
             db.commit()
             return redirect(url_for('plants.index'))

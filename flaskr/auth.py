@@ -11,6 +11,9 @@ bp = Blueprint('auth',__name__,url_prefix='/auth')
 
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
+    '''
+    Register function. Adding new username and hashed password to db.
+    '''
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -38,10 +41,12 @@ def register():
 
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
+    '''
+    Login function
+    '''
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        db = get_db()
         error = None
         user = User.query.filter_by(username = username).first()
 
@@ -52,7 +57,7 @@ def login():
 
         if error is None:
             session.clear()
-            session['user_id'] = user.id #cookie 
+            session['user_id'] = user.id #cookie
             return redirect(url_for('index'))
 
         flash(error)
@@ -63,7 +68,6 @@ def login():
 def load_logged_in_user():
     '''Check if user id is stored in a session'''
     user_id = session.get('user_id') # stored in session on the login
-    db = get_db()
     if user_id is None:
         g.user = None
     else:

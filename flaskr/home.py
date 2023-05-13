@@ -113,8 +113,6 @@ def details(id):
     Details of a flower pot
     '''
     pot = FlowerPot.query.get(id)
-    db = get_db()
-    
     plants_list = Plants.query.order_by(Plants.id.desc()).all()
     measurements = Measurements.query.order_by(Measurements.id).all()
     soil_moisture = []
@@ -165,6 +163,3 @@ def details(id):
     return render_template('home/details.html',
                            sensor_measurement = last_sensor_measurements, pot = pot,
                              plants_list=plants_list, data=data, current_temp= current_temp)
-
-
-
