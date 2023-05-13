@@ -1,16 +1,14 @@
-from sqlalchemy import create_engine, Column, Integer, String, LargeBinary, Float
-from sqlalchemy.ext.declarative import declarative_base
-import click
-from flask import current_app, g 
+import sqlalchemy as sa
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_sqlalchemy import SQLAlchemy
 
-engine = create_engine('sqlite:////home/filip/PyFlora/instance/database.db', echo=True)
-Base = declarative_base()
+#db = SQLAlchemy()
 
-class User(Base):
-    id = Column(Integer, primary_key=True)
-    username = Column(String(20), unique=True, nullable=False)
-    password = Column(String(128), nullable=False)
+class User(db.Model):
+    __tablename__ = 'user'
+    id = sa.Column(sa.Integer, primary_key=True)
+    username = sa.Column(sa.String(20), unique=True, nullable=False)
+    password = sa.Column(sa.String(128), nullable=False)
 
     def __repr__(self):
         return f"<User {self.username}>"
@@ -21,34 +19,29 @@ class User(Base):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-class Plants(Base):
+class Plants(db.Model):
     __tablename__ = 'plants'
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(50), unique=True, nullable=False)
-    image = Column(LargeBinary, nullable=False)
-    soil_moisture = Column(Integer, nullable=False)
-    light = Column(Float, nullable=False)
-    substrate = Column(String(50), nullable=True)
+    id = sa.Column(sa.Integer, primary_key=True, autoincrement=True)
+    name =sa.Column(sa.String(50), unique=True, nullable=False)
+    image =sa.Column(sa.LargeBinary, nullable=False)
+    soil_moisture =sa.Column(sa.Integer, nullable=False)
+    light =sa.Column(sa.Float, nullable=False)
+    substrate =sa.Column(sa.String(50), nullable=True)
 
-class FlowerPot(Base):
+class FlowerPot(db.Model):
     __tablename__ = 'flower_pot'
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    pot_name = Column(String(50), unique=True, nullable=False)
-    plant = Column(String(50), nullable=True)
-    status = Column(String(50), nullable=True)
+    id =sa.Column(sa.Integer, primary_key=True, autoincrement=True)
+    pot_name =sa.Column(sa.String(50), unique=True, nullable=False)
+    plant =sa.Column(sa.String(50), nullable=True)
+    status =sa.Column(sa.String(50), nullable=True)
 
-class Measurements(Base):
+class Measurements(db.Model):
     __tablename__ = 'measurements'
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    soil_moisture = Column(Integer, nullable=False)
-    acidity = Column(Float, nullable=False)
-    lux = Column(Integer, nullable=False)
+    id =sa.Column(sa.Integer, primary_key=True, autoincrement=True)
+    soil_moisture =sa.Column(sa.Integer, nullable=False)
+    acidity =sa.Column(sa.Float, nullable=False)
+    lux =sa.Column(sa.Integer, nullable=False)
 
-Base.metadata.create_all(engine)
-
-
-def get_db():
-    '''Uses scoped_session to reuse stored connection.'''
-    if not hasattr(g, 'db'):
-        g.db = (sessionmaker(bind=engine))
-    return g.db
+'''#Base.metadata.create_all(engine)
+with app.app_context():
+    db.create_all()'''

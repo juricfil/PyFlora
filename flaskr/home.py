@@ -9,7 +9,7 @@ from werkzeug.exceptions import abort
 from flaskr.auth import login_required
 from flaskr.db import get_db
 from flaskr.weather_api import current_temp
-from flaskr.models import User, Plants, FlowerPot, Measurements
+from flaskr.db import Plants, FlowerPot, Measurements
 
 bp = Blueprint('home', __name__)
 
@@ -121,9 +121,9 @@ def details(id):
     acidity = []
     lux = []
     for row in measurements:
-        soil_moisture.append(row[1])
-        acidity.append(row[2])
-        lux.append(row[3])
+        soil_moisture.append(row.soil_moisture)
+        acidity.append(row.acidity)
+        lux.append(row.lux)
     last_sensor_measurements = Measurements.query.order_by(Measurements.id.desc()).first()
     lux = list(map(lambda x: x//10, lux)) # scale lux by 10
     # Generate the figure **without using pyplot**.Based on the post button
