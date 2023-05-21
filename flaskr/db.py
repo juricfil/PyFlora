@@ -18,27 +18,27 @@ class Plants(db.Model):
     ''' Class for a plants table'''
     __tablename__ = 'plants'
     id = sa.Column(sa.Integer, primary_key=True, autoincrement=True)
-    name =sa.Column(sa.String(50), unique=True, nullable=False)
-    image =sa.Column(sa.LargeBinary, nullable=False)
-    soil_moisture =sa.Column(sa.Integer, nullable=False)
-    light =sa.Column(sa.Float, nullable=False)
-    substrate =sa.Column(sa.String(50), nullable=True)
+    name = sa.Column(sa.String(50), unique=True, nullable=False)
+    image = sa.Column(sa.LargeBinary, nullable=False)
+    soil_moisture = sa.Column(sa.Integer, nullable=False)
+    light = sa.Column(sa.Float, nullable=False)
+    substrate = sa.Column(sa.String(50), nullable=True)
 
 class FlowerPot(db.Model):
     ''' Class for a flower pot table'''
     __tablename__ = 'flower_pot'
-    id =sa.Column(sa.Integer, primary_key=True, autoincrement=True)
-    pot_name =sa.Column(sa.String(50), unique=True, nullable=False)
-    plant =sa.Column(sa.String(50), nullable=True)
-    status =sa.Column(sa.String(50), nullable=True)
+    id = sa.Column(sa.Integer, primary_key=True, autoincrement=True)
+    pot_name = sa.Column(sa.String(50), unique=True, nullable=False)
+    plant = sa.Column(sa.String(50), nullable=True)
+    status = sa.Column(sa.String(50), nullable=True)
 
 class Measurements(db.Model):
     ''' Class for a measurements table'''
     __tablename__ = 'measurements'
-    id =sa.Column(sa.Integer, primary_key=True, autoincrement=True)
-    soil_moisture =sa.Column(sa.Integer, nullable=False)
-    acidity =sa.Column(sa.Float, nullable=False)
-    lux =sa.Column(sa.Integer, nullable=False)
+    id = sa.Column(sa.Integer, primary_key=True, autoincrement=True)
+    soil_moisture = sa.Column(sa.Integer, nullable=False)
+    acidity = sa.Column(sa.Float, nullable=False)
+    lux = sa.Column(sa.Integer, nullable=False)
 
 #Defining functions to be used for database
 def init_app(app):
