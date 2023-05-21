@@ -1,0 +1,22 @@
+FROM python:3.8.5-slim-buster
+
+# Set the working directory to /flaskr
+WORKDIR /flaskr
+
+# Copy the requirements file into the container at /flaskr
+COPY requirements.txt /flaskr
+
+# Install any needed packages specified in requirements.txt
+RUN pip install --trusted-host pypi.python.org -r requirements.txt
+
+# Copy the current directory contents into the container at /flaskr
+COPY . /flaskr
+
+# Set the environment variable for Flask
+ENV FLASK_APP=flaskr
+
+# Expose port 5000 for Flask app
+EXPOSE 5000
+
+# Run the command to start Flask server
+CMD ["flask", "run", "--host=0.0.0.0"]
