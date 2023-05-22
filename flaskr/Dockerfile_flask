@@ -1,19 +1,19 @@
 FROM python:3.8.5-slim-buster
 
-# Set the working directory to /flaskr
-WORKDIR /flaskr
+# Set the working directory
+WORKDIR /PyFlora/flaskr
 
-# Copy the requirements file into the container at /flaskr
-COPY requirements.txt /flaskr
+# Copy the requirements file into the container 
+COPY requirements.txt /PyFlora/flaskr
 
 # Install any needed packages specified in requirements.txt
-RUN pip install --trusted-host pypi.python.org -r requirements.txt
+RUN pip install --trusted-host pypi.python.org -r /PyFlora/flaskr/requirements.txt
 
-# Copy the current directory contents into the container at /flaskr
-COPY . /flaskr
+# Copy the Flask application code into the container
+COPY ../. /PyFlora
 
 # Set the environment variable for Flask
-ENV FLASK_APP=flaskr
+ENV FLASK_APP=__init__.py
 
 # Expose port 5000 for Flask app
 EXPOSE 5000
