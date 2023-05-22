@@ -10,6 +10,7 @@ from flaskr.auth import login_required
 from flaskr.db import get_db
 from flaskr.weather_api import current_temp
 from flaskr.db import Plants, FlowerPot, Measurements
+from flaskr.api_measurements import get_measurement_api
 
 bp = Blueprint('home', __name__)
 
@@ -112,6 +113,16 @@ def details(id):
     '''
     Details of a flower pot
     '''
+    try:
+        ''' 
+        Using try so the app executes normally if the other docker that is providing the measurements is not up
+        '''
+        db = get_db()
+        new_measurement = Measurements(soil_moisture=get_measurement_api('soil_moisture'), acidity=get_measurement_api('acidity'), lux=get_measurement_api('lux'))
+        db.add(new_measurement)
+        db.commit()
+    except:
+        pass
     pot = FlowerPot.query.get(id)
     plants_list = Plants.query.order_by(Plants.id.desc()).all()
     measurements = Measurements.query.order_by(Measurements.id).all()

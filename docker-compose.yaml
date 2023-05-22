@@ -1,0 +1,26 @@
+version: '3'
+services:
+    pyflora_flask:
+      build:
+        context: ./flaskr
+        dockerfile: Dockerfile_flask
+      ports:
+        - '5000:5000'
+      volumes:
+        - ../PyFlora:/PyFlora
+      networks:
+        - pyflora_network
+
+    fake_raspberry_api:
+      build:
+        context: ./app
+        dockerfile: Dockerfile_API
+      ports:
+      - '8002:80'
+      networks:
+        - pyflora_network
+      volumes:
+      - ./app:/app
+
+networks:
+  pyflora_network:
