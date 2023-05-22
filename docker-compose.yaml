@@ -7,7 +7,7 @@ services:
       ports:
         - '5000:5000'
       volumes:
-        - ../PyFlora:/PyFlora
+        - .:/PyFlora
       networks:
         - pyflora_network
 

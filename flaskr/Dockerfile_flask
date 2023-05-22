@@ -10,7 +10,7 @@ COPY requirements.txt /PyFlora/flaskr
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Copy the Flask application code into the container
-COPY ../. /PyFlora
+COPY . /PyFlora
 
 # Set the environment variable for Flask
 ENV FLASK_APP=__init__.py
