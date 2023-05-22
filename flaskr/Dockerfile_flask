@@ -7,13 +7,14 @@ WORKDIR /PyFlora/flaskr
 COPY requirements.txt /PyFlora/flaskr
 
 # Install any needed packages specified in requirements.txt
-RUN pip install --trusted-host pypi.python.org -r /PyFlora/flaskr/requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Copy the Flask application code into the container
 COPY ../. /PyFlora
 
 # Set the environment variable for Flask
 ENV FLASK_APP=__init__.py
+ENV FLASK_RUN_HOST=0.0.0.0
 
 # Expose port 5000 for Flask app
 EXPOSE 5000

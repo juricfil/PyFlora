@@ -4,7 +4,7 @@ def get_measurement_api(measurement_var):
     '''
     return API measurement based on the measurement_var 
     '''
-    api_url = f"http://localhost/measurements/{measurement_var}"
+    api_url = f"http://fake_raspberry_api:80/measurements/{measurement_var}"
     response = requests.get(api_url)
     if measurement_var == 'soil_moisture':
         soil_moisture = response.json()['Soil moisture']
