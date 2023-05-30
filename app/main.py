@@ -3,11 +3,12 @@ import random
 
 app = FastAPI()
 
-@app.get('/measurements/{measurement_type}')
-async def measurement_generator(measurement_type: str):
-    '''
+
+@app.get("/measurements/{measurement_type}")
+async def measurement_generator(measurement_type: str) -> dict:
+    """
     Generate different types of measurements and send them over api
-    '''
+    """
     if measurement_type == "soil_moisture":
         value = random.randrange(0, 100)
         return {"Soil moisture": value}
